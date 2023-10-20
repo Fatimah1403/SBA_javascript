@@ -80,4 +80,14 @@ const CourseInfo = {
     if (ag.course_id !== course.id) {
       throw new Error("Invalid input: AssignmentGroup does not belong to the course.");
     }
+    const result = [];
+
+  // Group submissions by learner_id.
+  const submissionsByLearner = submissions.reduce((acc, submission) => {
+    if (!acc[submission.learner_id]) {
+      acc[submission.learner_id] = {};
+    }
+    acc[submission.learner_id][submission.assignment_id] = submission;
+    return acc;
+  }, {});
   }
