@@ -90,7 +90,42 @@ const CourseInfo = {
     acc[submission.learner_id][submission.assignment_id] = submission;
     return acc;
   }, {});
-  
+  for (const learnerId in submissionsByLearner) {
+    const learnerSubmissions = submissionsByLearner[learnerId];
+    const learnerData = {
+      id: parseInt(learnerId),
+    };
+    let totalPoints = 0;
+    let totalWeightedPoints = 0;
+
+    for (const assignment of ag.assignments) {
+      if (learnerSubmissions[assignment.id]) {
+        const submission = learnerSubmissions[assignment.id];
+        const dueDate = new Date(assignment.due_at);
+        const submittedDate = new Date(submission.submission.submitted_at);
+
+        if (dueDate < submittedDate) {
+          // Deduct 10% if the submission is late.
+          submission.submission.score -= Math.ceil(
+            (submission.submission.score / assignment.points_possible) * (assignment.points_possible * 0.1)
+          );
+        }
+        if (assignment.points_possible === 0) {
+          throw new Error("Invalid input: points_possible cannot be 0.");
+        }
+
+        const assignmentPercentage = (submission.submission.score / assignment.points_possible) * 100;
+        const assignmentWeight = assignment.points_possible * (ag.group_weight / 100);
+
+        totalPoints += assignment.points_possible;
+        totalWeightedPoints += assignmentPercentage * assignmentWeight;
+
+        learnerData[assignment.id] = assignmentPercentage / 100;
+      }
+    }
+      }
+  }
+  return result;
   }
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
