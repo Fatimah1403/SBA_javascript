@@ -122,6 +122,9 @@ const CourseInfo = {
 
         learnerData[assignment.id] = assignmentPercentage / 100;
       }
+      earnerData.avg = (totalWeightedPoints / totalPoints) * 100;
+    result.push(learnerData);
+  }
     }
       }
   }
