@@ -90,4 +90,8 @@ const CourseInfo = {
     acc[submission.learner_id][submission.assignment_id] = submission;
     return acc;
   }, {});
+  
   }
+  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+
+console.log(result);
